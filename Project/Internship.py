@@ -460,35 +460,63 @@ with Tab6:
         st.warning("Harap Menyelesaikan Perhitungan Di Tab 5 Terlebih Dahulu")
     else:
         st.subheader("Visualisasi Hasil Perhitungan SAW")
+        import matplotlib.pyplot as plt
         
         df_plot = df_hasil_saw.sort_values('Hasil Perhitungan', ascending=True)
         companies = df_plot['Company Name'].tolist()
         scores = df_plot['Hasil Perhitungan'].tolist()
         
-        # 1. Grafik (Line Chart)
-        st.markdown("**Grafik (Line Chart)**")
-        fig1, ax1 = plt.subplots(figsize=(10, 5))
-        ax1.plot(df_hasil_saw['Company Name'], df_hasil_saw['Hasil Perhitungan'], marker='o', linestyle='-', color='b')
-        ax1.set_xlabel('Company Name')
-        ax1.set_ylabel('Hasil Perhitungan')
-        ax1.set_title('Grafik Hasil Perhitungan SAW')
-        ax1.grid(True, linestyle='--', alpha=0.7)
-        plt.xticks(rotation=45, ha='right')
-        st.pyplot(fig1)
+        # Membuat 2 kolom untuk baris pertama
+        col1, col2 = st.columns(2)
         
-        # 2. Bar Chart
-        st.markdown("**Bar Chart**")
-        fig2, ax2 = plt.subplots(figsize=(10, 5))
-        ax2.barh(companies, scores, color='skyblue')
-        ax2.set_xlabel('Hasil Perhitungan')
-        ax2.set_ylabel('Company Name')
-        ax2.set_title('Bar Chart Hasil Perhitungan SAW')
-        st.pyplot(fig2)
+        with col1:
+            # 1. Grafik (Line Chart)
+            st.markdown("**1. Grafik (Line Chart)**")
+            fig1, ax1 = plt.subplots(figsize=(5, 4))
+            ax1.plot(df_hasil_saw['Company Name'], df_hasil_saw['Hasil Perhitungan'], marker='o', linestyle='-', color='b')
+            ax1.set_xlabel('Company Name')
+            ax1.set_ylabel('Hasil Perhitungan')
+            ax1.set_title('Grafik Hasil Perhitungan SAW')
+            ax1.grid(True, linestyle='--', alpha=0.7)
+            plt.xticks(rotation=45, ha='right')
+            st.pyplot(fig1, use_container_width=True)
+            st.caption("Keterangan: Line chart menunjukkan perbandingan nilai SAW antar perusahaan. Titik tertinggi adalah yang terbaik.")
+
+        with col2:
+            # 2. Bar Chart (Horizontal)
+            st.markdown("**2. Bar Chart (Horizontal)**")
+            fig2, ax2 = plt.subplots(figsize=(5, 4))
+            ax2.barh(companies, scores, color='skyblue')
+            ax2.set_xlabel('Hasil Perhitungan')
+            ax2.set_ylabel('Company Name')
+            ax2.set_title('Bar Chart Hasil Perhitungan SAW (Horizontal)')
+            st.pyplot(fig2, use_container_width=True)
+            st.caption("Keterangan: Bar chart horizontal memudahkan membaca nama perusahaan. Batang terpanjang adalah pilihan terbaik.")
+
+        st.divider() # Garis pemisah antar baris
         
-        # 3. Pie Chart
-        st.markdown("**Pie Chart**")
-        fig3, ax3 = plt.subplots(figsize=(8, 8))
-        ax3.pie(df_hasil_saw['Hasil Perhitungan'], labels=df_hasil_saw['Company Name'], autopct='%1.1f%%', startangle=90)
-        ax3.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        ax3.set_title('Pie Chart Proporsi Hasil Perhitungan SAW')
-        st.pyplot(fig3)
+        # Membuat 2 kolom untuk baris kedua
+        col3, col4 = st.columns(2)
+        
+        with col3:
+            # 3. Bar Chart (Vertikal)
+            st.markdown("**3. Bar Chart (Vertikal)**")
+            fig3, ax3 = plt.subplots(figsize=(5, 4))
+            ax3.bar(companies, scores, color='lightgreen')
+            ax3.set_xlabel('Company Name')
+            ax3.set_ylabel('Hasil Perhitungan')
+            ax3.set_title('Bar Chart Hasil Perhitungan SAW (Vertikal)')
+            ax3.set_xticks(range(len(companies)))
+            ax3.set_xticklabels(companies, rotation=45, ha='right')
+            st.pyplot(fig3, use_container_width=True)
+            st.caption("Keterangan: Bar chart vertikal membandingkan tinggi batang. Semakin tinggi batang, semakin direkomendasikan.")
+
+        with col4:
+            # 4. Pie Chart
+            st.markdown("**4. Pie Chart**")
+            fig4, ax4 = plt.subplots(figsize=(5, 4))
+            ax4.pie(df_hasil_saw['Hasil Perhitungan'], labels=df_hasil_saw['Company Name'], autopct='%1.1f%%', startangle=90)
+            ax4.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+            ax4.set_title('Pie Chart Proporsi Hasil Perhitungan SAW')
+            st.pyplot(fig4, use_container_width=True)
+            st.caption("Keterangan: Pie chart menampilkan persentase proporsi nilai SAW masing-masing perusahaan terhadap total.")
